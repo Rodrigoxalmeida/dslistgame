@@ -28,16 +28,24 @@ public class GameListService {
 		return dto;
 	}
 	
+	@Transactional(readOnly = true)
 	public GameListDTO findById(Long id) {
 		GameList obj = repository.findById(id).get();
-		return new GameListDTO(obj);
-		
+		return new GameListDTO(obj);		
+	}
+	
+	@Transactional
+	public GameListDTO create(GameListDTO dto) {
+		GameList entity = new GameList();
+		entity.setId(null);
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		return new GameListDTO(entity);
 	}
 	
 	
 	@Transactional
 	public void move(Long listId, int sourceIndex, int destinationIndex ) {
-		
 		List<GameMinProjection> list = gameRepository.searchByList(listId);
 		
 		GameMinProjection obj = list.remove(sourceIndex);

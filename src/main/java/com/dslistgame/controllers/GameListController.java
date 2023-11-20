@@ -1,5 +1,6 @@
 package com.dslistgame.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dslistgame.dto.GameListDTO;
 import com.dslistgame.dto.GameMinDTO;
@@ -39,11 +41,19 @@ public class GameListController {
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	@PostMapping
+	public ResponseEntity<GameListDTO> create(@RequestBody GameListDTO dto){
+		dto = service.create(dto);
+		URI uri= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
+	}
+	
 	@GetMapping(value = "/{listId}/games")
 	public ResponseEntity <List<GameMinDTO>> findByList(@PathVariable Long listId){
 		List<GameMinDTO> dto = gameService.findByList(listId);
 		return ResponseEntity.ok().body(dto);
 	}
+	
 	
 	@PostMapping(value = "/{listId}/replacement")
 	public void move(@PathVariable Long listId, @RequestBody ReplacementDTO body){
