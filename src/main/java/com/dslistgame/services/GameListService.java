@@ -28,6 +28,13 @@ public class GameListService {
 		return dto;
 	}
 	
+	public GameListDTO findById(Long id) {
+		GameList obj = repository.findById(id).get();
+		return new GameListDTO(obj);
+		
+	}
+	
+	
 	@Transactional
 	public void move(Long listId, int sourceIndex, int destinationIndex ) {
 		

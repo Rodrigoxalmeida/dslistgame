@@ -28,13 +28,19 @@ public class GameListController {
 	private GameService gameService;
 	
 	@GetMapping
-	ResponseEntity<List<GameListDTO>> findAll(){
+	public ResponseEntity<List<GameListDTO>> findAll(){
 		List<GameListDTO> dto = service.findAll();
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<GameListDTO> findById(@PathVariable Long id) {
+		GameListDTO dto = service.findById(id);
+		return ResponseEntity.ok().body(dto);
+	}
+	
 	@GetMapping(value = "/{listId}/games")
-	ResponseEntity <List<GameMinDTO>> findByList(@PathVariable Long listId){
+	public ResponseEntity <List<GameMinDTO>> findByList(@PathVariable Long listId){
 		List<GameMinDTO> dto = gameService.findByList(listId);
 		return ResponseEntity.ok().body(dto);
 	}
